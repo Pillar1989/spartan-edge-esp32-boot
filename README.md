@@ -36,10 +36,10 @@ If you want more details, you can click the [link](https://github.com/espressif/
 
 ## Library Usage
 
-1. Library Installation  
+1. ***Library Installation***  
   see [Installing Additional Arduino Libraries](https://www.arduino.cc/en/Guide/Libraries)
 
-2. Prepare SDCard   
+2. ***Prepare SDCard***  
   2.1 Format the SDCard with FAT16/FAT32 filesystem.  
   2.2 Create a top level subfolder named __overlay__ in the SDCard.  
   2.3 Put your bitstream or [sample bitstream](#Sample-bitstreams) files (must have a extend name .bit) into the folder __overlay__.  
@@ -47,21 +47,18 @@ If you want more details, you can click the [link](https://github.com/espressif/
   2.5 If you run example 02LoadConfigBitstream, put [**board_config.ini**](extras/board_config.ini) into SDCard root folder.  
   2.6 Insert the SDCard to the Spartan (Edge Accelerator) Board.  
 
-3. Connect the Spartan Board through USB Type-C wire to the PC, and install USB232 driver (chip CP2102).
+3. ***Upload example***  
+  3.1 Connect the Spartan Board through USB Type-C wire to the PC, and install USB232 driver (chip CP2102).  
+  3.2 Turn the power switch (near the USB Type-C slot) to USB side to power on the board.  
+  3.3 Open one of the library examples by Arduino IDE.  
+  3.4 Check Board & Port setting in Arduino IDE as described in last section.  
+  3.5 Press 'BOOT' Button on Sparton Board and last more than 1 seconds to force ESP32 enter Bootloader mode.  
+  3.6 Press 'Upload' button in Arduino IDE to upload the example ('s compiled binary) to ESP32.  
 
-4. Turn the power switch (near the USB Type-C slot) to USB side to power on the board.
-
-5. Open one of the library examples by Arduino IDE.  
-
-6. Check Board & Port setting in Arduino IDE as described in last section.  
-
-7. Press 'BOOT' Button on Sparton Board and last more than 1 seconds to force ESP32 enter Bootloader mode.
-
-8. Press 'Upload' button in Arduino IDE to upload the example ('s compiled binary) to ESP32.  
-
-9. Press 'RST' button on Spartan Board to startup the example.  
-
-10. After the example bootup a few seconds, the FPGA_DONE(red color) LED on the board will light on.
+4. ***Run example***  
+  4.1 Make sure the on-board DIP-switch K5 (last one) on Slave(ON) side, which enable FPGA programing by other device(MCU).  
+  4.2 Press 'RST' button on Spartan Board to startup the example.  
+  4.3 After the example bootup a few seconds, the FPGA_DONE(red color) LED on the board will light on.
 
 <br>
 
