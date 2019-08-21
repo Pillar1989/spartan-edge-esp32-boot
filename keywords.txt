@@ -1,0 +1,28 @@
+#################################################
+# Syntax Coloring Map For spartan-edge-esp32-boot
+#################################################
+
+##############################################################
+# Class (KEYWORD1)
+##############################################################
+
+spartan_edge_esp32_boot	KEYWORD1	spartan-edge-esp32-boot
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+# spartan_edge_esp32_boot methods
+begin	KEYWORD2
+xfpgaGPIOInit	KEYWORD2
+xlibsSstream	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+XFPGA_CCLK_PIN	LITERAL1
+XFPGA_DIN_PIN	LITERAL1
+XFPGA_PROGRAM_PIN	LITERAL1
+XFPGA_INTB_PIN	LITERAL1
+XFPGA_DONE_PIN	LITERAL1
