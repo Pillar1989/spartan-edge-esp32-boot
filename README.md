@@ -64,7 +64,7 @@ If you want more details, you can click the [link](https://github.com/espressif/
 
 #### Sample bitstreams
 Some bitstream/FPGA_LOGIC files we compiled are provided here, you can download them directly.  
-  + [spi2gpio.bit](https://github.com/sea-s7/AlphaTest_V1.0/tree/master/spi2gpio)  
+  + [spi2gpio.bit](https://github.com/sea-s7/spartan-edge-ioex/tree/bitstream/bitstream)  
   GPIO extension controlled by SPI interface, with support of ADC/DAC/RGB-LED, see ***[source code](https://github.com/sea-s7/Demo_project/tree/master/spi2gpio)***.  
 
 <br>
