@@ -17,25 +17,25 @@ void spartan_edge_esp32_boot::begin(void) {
 // XFPGA pin Initialize
 void spartan_edge_esp32_boot::xfpgaGPIOInit(void) {
   // GPIO Initialize
-  pinMode(XFPGA_INTB_PIN, OUTPUT | PULLUP);
-  digitalWrite(XFPGA_INTB_PIN, HIGH);
+  pinMode(XFPGA_INTB_PIN, INPUT);
+  pinMode(XFPGA_DONE_PIN, INPUT);
   pinMode(XFPGA_PROGRAM_PIN, OUTPUT);
-  digitalWrite(XFPGA_PROGRAM_PIN, HIGH);
-  delay(50);
 
   // FPGA configuration start sign
-  digitalWrite(XFPGA_INTB_PIN, LOW);
   digitalWrite(XFPGA_PROGRAM_PIN, LOW);
-  delay(50);
-  digitalWrite(XFPGA_INTB_PIN, HIGH);
+  pinMode(XFPGA_CCLK_PIN, OUTPUT);
+  digitalWrite(XFPGA_CCLK_PIN, LOW);
   digitalWrite(XFPGA_PROGRAM_PIN, HIGH);
+
+  // wait until fpga reports reset complete
+  while(digitalRead(XFPGA_INTB_PIN) == 0) {}
 }
 
 // loading the FPGA LOGIC
 int spartan_edge_esp32_boot::xlibsSstream(const char* path) {
   unsigned char byte_buff[1024];
   int byte_len;
-  unsigned char byte;
+  unsigned byte;
   int i = 0;
   int j = 0;
 	
@@ -55,10 +55,7 @@ int spartan_edge_esp32_boot::xlibsSstream(const char* path) {
   }
 
   /* put pins down for Configuration */
-  pinMode(XFPGA_CCLK_PIN, OUTPUT);
   pinMode(XFPGA_DIN_PIN, OUTPUT);
-  digitalWrite(XFPGA_CCLK_PIN, LOW);
-  digitalWrite(XFPGA_DIN_PIN, LOW);
   
   /* read data form bitstream */
   byte_len = file.read(byte_buff, READ_SIZE);
@@ -72,13 +69,10 @@ int spartan_edge_esp32_boot::xlibsSstream(const char* path) {
       byte = byte_buff[i];
 
       for(j = 0;j < 8;j++) {
-        digitalWrite(XFPGA_CCLK_PIN, LOW);
-        if ((byte&0x80) == 0x80)
-          digitalWrite(XFPGA_DIN_PIN, HIGH);
-        else
-          digitalWrite(XFPGA_DIN_PIN, LOW);
+        REG_WRITE(GPIO_OUT_W1TC_REG, (1<<XFPGA_CCLK_PIN));
+        REG_WRITE((byte&0x80)?GPIO_OUT_W1TS_REG:GPIO_OUT_W1TC_REG, (1<<XFPGA_DIN_PIN));
         byte = byte << 1;
-        digitalWrite(XFPGA_CCLK_PIN, HIGH);
+        REG_WRITE(GPIO_OUT_W1TS_REG, (1<<XFPGA_CCLK_PIN));
       }
     }
     byte_len = file.read(byte_buff, READ_SIZE);
@@ -90,7 +84,6 @@ int spartan_edge_esp32_boot::xlibsSstream(const char* path) {
   file.close();
 	
   // check the result
-  pinMode(XFPGA_DONE_PIN, INPUT);
   if(0 == digitalRead(XFPGA_DONE_PIN)) {
     Serial.println("FPGA Configuration Failed");
   }
