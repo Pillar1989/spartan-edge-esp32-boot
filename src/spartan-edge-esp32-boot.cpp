@@ -46,26 +46,39 @@ int spartan_edge_esp32_boot::xlibsSstream(const char* path) {
     Serial.println("please check the file exists ");
     return -1;
   }
-   
-  // seek 100 byte
-  int ret = file.seek(100, SeekSet);
-  if(!ret) {
-    Serial.println("Failed to seek");
-    return -1;
-  }
+
+  /* read data form bitstream */
+  byte_len = file.read(byte_buff, READ_SIZE);
+
+  // find the raw bits
+  if(byte_buff[0] != 0xff)
+  {
+    // skip header
+    i = ((byte_buff[0]<<8) | byte_buff[1]) + 4;
+
+    // find the 'e' record
+    while(byte_buff[i] != 0x65)
+    {
+        // skip the record
+        i += (byte_buff[i+1]<<8 | byte_buff[i+2]) + 3;
+        // exit if the next record isn't within the buffer
+        if(i>= byte_len)
+            return -1;
+    }
+    // skip the field name and bitstrem length
+    i += 5;
+  } // else it's already a raw bin file
 
   /* put pins down for Configuration */
   pinMode(XFPGA_DIN_PIN, OUTPUT);
   
-  /* read data form bitstream */
-  byte_len = file.read(byte_buff, READ_SIZE);
    /*
    * loading the bitstream
    * If you want to know the details,you can Refer to the following documentation
    * https://www.xilinx.com/support/documentation/user_guides/ug470_7Series_Config.pdf
    */
   while ((byte_len != 0)&&(byte_len != -1)) {
-    for (i = 0;i < byte_len;i++) {
+    for ( ;i < byte_len;i++) {
       byte = byte_buff[i];
 
       for(j = 0;j < 8;j++) {
@@ -76,6 +89,7 @@ int spartan_edge_esp32_boot::xlibsSstream(const char* path) {
       }
     }
     byte_len = file.read(byte_buff, READ_SIZE);
+    i = 0;
   }
   digitalWrite(XFPGA_CCLK_PIN, LOW); 
 	
