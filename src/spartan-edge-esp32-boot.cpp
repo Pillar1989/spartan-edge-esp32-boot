@@ -1,11 +1,26 @@
 #include <spartan-edge-esp32-boot.h>
 #include "SD_MMC.h"
 
+extern "C" {
+  //external header for the pulling up of SD pins at the initialization
+  #include "driver/sdmmc_host.h"
+}
+
 // initialization
 void spartan_edge_esp32_boot::begin(void) {
   // initialize serial communication at 115200 bits per second: 
   Serial.begin(115200); 
+
+  //PULL UP of SD card pins <--- preventing mounting failure due to floating state
+  sdmmc_host_pullup_en(1, 4); //Slot: 1 and Bit mode: 4
   
+  // ESP/SD pulled up pins list as reference:
+  // ESP GPIO2        (pin 22) <---> SD CARD D0
+  // ESP GPIO4        (pin 24) <---> SD CARD D1
+  // ESP GPIO12/MTDI  (pin 18) <---> SD CARD D2
+  // ESP GPIO13/MTCK  (pin 20) <---> SD CARD D3
+  // ESP GPIO15/MTDO  (pin 21) <---> SD CARD CMD
+
   // Mount SD Card
   if(!SD_MMC.begin()) {
     Serial.println("Card Mount Failed,please reboot the board");
