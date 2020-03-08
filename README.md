@@ -18,26 +18,40 @@ It can be used independently as an Arduino compatible board, or plugged into an 
 <br>
 
 ## Arduino IDE with ESP32 Boards Support
+
+Using these steps, you will be able to talk to the ESP32 part of your Spartan Edge Accelerator Board. This is a prerequisite for the next steps; the FPGA is not involved yet.
+
 ___using Arduino IDE Boards Manager___  
 Starting with 1.6.4, Arduino allows installation of third-party platform packages using Boards Manager. We have packages available for Windows, Mac OS, and Linux (32 and 64 bit).
 
 - Install the current upstream Arduino IDE at the 1.8 level or later. The current version is at the [Arduino website](http://www.arduino.cc/en/main/software).
 - Start Arduino and open Preferences window.
 - Enter ```https://dl.espressif.com/dl/package_esp32_index.json``` into *Additional Board Manager URLs* field. You can add multiple URLs, separating them with commas.
+  - Stable release link: `https://dl.espressif.com/dl/package_esp32_index.json`  
+  - Development release link: `https://dl.espressif.com/dl/package_esp32_dev_index.json`  
+  - If you want more details, you can click the [link](https://github.com/espressif/arduino-esp32)
 - Open Boards Manager from Tools > Board menu and install *esp32* platform (and don't forget to select your ESP32 board from Tools > Board menu after installation).
-- select ___tool->board->DOIT ESP32 DEVKIT___   
+- Select ___tool->board->DOIT ESP32 DEVKIT___
 
+Test your setup by building and running a test program (e.g. [one that talks to the serial port](https://www.arduino.cc/en/tutorial/SoftwareSerialExample)). <br>💡 You cannot access the GPIO pins yet, as these are connected to the FPGA not the ESP32.
 
-Stable release link: `https://dl.espressif.com/dl/package_esp32_index.json`  
-Development release link: `https://dl.espressif.com/dl/package_esp32_dev_index.json`  
-If you want more details, you can click the [link](https://github.com/espressif/arduino-esp32)
+1. Connect the Spartan Board through USB Type-C wire to the PC, and install USB232 driver (chip CP2102) for your computer's operating system.
+1. Turn the power switch (near the USB Type-C slot) to USB side to power on the board.
+1. Check serial port and board (___DOIT ESP32 DEVKIT___) as you would do when programming any other Arduino IDE-supported board
+1. Copy and paste some code that talks to the serial port into the editor window
+1. Open the Arduino IDE's serial console (using the top right button), and ensure that it is tuned to the correct baud speed, as required by the example you are running.
+1. Build and upload the code using the 'Upload' button, and watch the result on the serial port.
+
 
 <br>
 
 ## Library Usage
 
+Using these steps, you will be able to tell the ESP32 on the Spartan Edge Accelerator Board to program the FPGA out of a bitstream file on the SD card.
+
 1. ***Library Installation***  
-  see [Installing Additional Arduino Libraries](https://www.arduino.cc/en/Guide/Libraries)
+
+Install this Git repository as an additional library. See [Installing Additional Arduino Libraries](https://www.arduino.cc/en/Guide/Libraries)
 
 2. ***Prepare SDCard***  
   2.1 Format the SDCard with FAT16/FAT32 filesystem.  
@@ -48,16 +62,16 @@ If you want more details, you can click the [link](https://github.com/espressif/
   2.6 Insert the SDCard to the Spartan (Edge Accelerator) Board.  
 
 3. ***Upload example***  
-  3.1 Connect the Spartan Board through USB Type-C wire to the PC, and install USB232 driver (chip CP2102).  
-  3.2 Turn the power switch (near the USB Type-C slot) to USB side to power on the board.  
-  3.3 Open one of the library examples by Arduino IDE.  
+  3.1 Connect the Spartan Board through USB Type-C wire to the PC and power it up, as described above.
+  3.1 Open Arduino IDE's serial console, and set speed to 115200 baud.
+  3.3 Open one of the library examples (01LoadDefaultBitstream or 02LoadConfigBitstream) by Arduino IDE.  
   3.4 Check Board & Port setting in Arduino IDE as described in last section.  
   3.5 Press 'BOOT' Button on Sparton Board and last more than 1 seconds to force ESP32 enter Bootloader mode.  
-  3.6 Press 'Upload' button in Arduino IDE to upload the example ('s compiled binary) to ESP32.  
+  3.6 Press 'Upload' button in Arduino IDE to upload the example ('s compiled binary) to ESP32.  <br>💡 At this stage, a mount error is expected on the serial console: <pre>Card Mount Failed,please reboot the board</pre> Just continue following the instructions below.
 
 4. ***Run example***  
   4.1 Make sure the on-board DIP-switch K5 (last one) on Slave(ON) side, which enable FPGA programing by other device(MCU).  
-  4.2 Press 'RST' button on Spartan Board to startup the example.  
+  4.2 Press 'RST' button on Spartan Board to startup the example you just uploaded.  
   4.3 After the example bootup a few seconds, the FPGA_DONE(red color) LED on the board will light on.
 
 <br>
