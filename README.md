@@ -56,7 +56,7 @@ Install this Git repository as an additional library, either from a checked out 
 2. ***Prepare SDCard***  
   2.1 Format the SDCard with FAT16/FAT32 filesystem.  
   2.2 Create a top level subfolder named __overlay__ in the SDCard.  
-  2.3 Put your bitstream or [sample bitstream](#Sample-bitstreams) files (must have a extend name .bit) into the folder __overlay__.  
+  2.3 Put your bitstream files (must have a extend name .bit) into the folder __overlay__.  
   2.4 If you run example 01LoadDefaultBitstream, rename the bitstream file in __overlay__ to __default.bit__.  
   2.5 If you run example 02LoadConfigBitstream, put [**board_config.ini**](extras/board_config.ini) into SDCard root folder.  
   2.6 Insert the SDCard to the Spartan (Edge Accelerator) Board.  
@@ -73,13 +73,6 @@ Install this Git repository as an additional library, either from a checked out 
   4.1 Make sure the on-board DIP-switch K5 (last one) on Slave(ON) side, which enable FPGA programing by other device(MCU).  
   4.2 Press 'RST' button on Spartan Board to startup the example you just uploaded.  
   4.3 After the example bootup a few seconds, the FPGA_DONE(red color) LED on the board will light on.
-
-<br>
-
-#### Sample bitstreams
-Some bitstream/FPGA_LOGIC files we compiled are provided here, you can download them directly.  
-  + [spi2gpio.bit](https://github.com/sea-s7/spartan-edge-ioex/tree/bitstream/bitstream)  
-  GPIO extension controlled by SPI interface, with support of ADC/DAC/RGB-LED, see ***[source code](https://github.com/sea-s7/Demo_project/tree/master/spi2gpio)***.  
 
 <br>
 
