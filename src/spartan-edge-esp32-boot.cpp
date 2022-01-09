@@ -48,7 +48,7 @@ void spartan_edge_esp32_boot::xfpgaGPIOInit(void) {
 
 // loading the FPGA LOGIC
 int spartan_edge_esp32_boot::xlibsSstream(const char* path) {
-  unsigned char byte_buff[1024];
+  unsigned char byte_buff[READ_SIZE];
   int byte_len;
   unsigned byte;
   int i = 0;
